@@ -61,6 +61,5 @@ Possibilities are endless here, gentlemen:
 
 >The only limit is yourself.
 
->-- zombo.com
 
-[Fork on GitHub](http://github.com/lericson/fish)
+[Fork on GitHub](http://github.com/DeeshReddyP/fish)
