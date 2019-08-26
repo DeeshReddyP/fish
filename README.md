@@ -9,10 +9,13 @@ makes any program look awesome and display useful data while churning away on
 some good 'ole data.
 
 Usage? Simple enough:
+
+```python
 >>> churning = []
 >>> def churn_churn():
-        pass
+...      pass
 
+```
 ```python
 >>> import fish
 >>> while churning:
