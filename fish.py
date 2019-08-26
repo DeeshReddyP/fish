@@ -31,19 +31,19 @@ import time
 import string
 
 from struct import unpack
-from fcntl import ioctl
-from termios import TIOCGWINSZ
+# from fcntl import ioctl
+# from termios import TIOCGWINSZ
 
 from itertools import count
 
 def get_term_width():
     """Get terminal width or None."""
-    for fp in sys.stdin, sys.stdout, sys.stderr:
-        try:
-            return unpack("hh", ioctl(fp.fileno(), TIOCGWINSZ, "    "))[1]
-        except IOError:
-            continue
-
+    # for fp in sys.stdin, sys.stdout, sys.stderr:
+    #     try:
+    #         return unpack("hh", ioctl(fp.fileno(), TIOCGWINSZ, "    "))[1]
+    #     except IOError:
+    #         continue
+    pass
 class ANSIControl(object):
     def __init__(self, outfile=sys.stderr, flush=True):
         self.outfile = outfile
@@ -88,7 +88,7 @@ class SwimFishBase(object):
         return self.world_length - self.own_length
 
     def animate(self, outfile=None, force=False):
-        step = self.worldstep.next()
+        step = self.worldstep.__next__()
         # As there are two directions we pretend the world is twice as large as
         # it really is, then handle the overflow
         pos = (self.velocity * step) % (self.actual_length * 2)
@@ -195,7 +195,7 @@ class SalmonLook(SingleLineFishPrinter):
         return ["<*}}}><" if reverse else "><{{{*>"]
 
 def docstring2lines(ds):
-    return filter(None, ds.split("\n"))
+    return list(filter(None, ds.split("\n")))
 
 try:
     maketrans = string.maketrans
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, lambda *a: sys.exit(0))
 
     parser = optparse.OptionParser()
-    parser.add_option("-f", "--fish", choices=fish_types.keys() + ["?"],
+    parser.add_option("-f", "--fish", choices=list(fish_types.keys()) ,
                       default="bass", help="fish type (specify ? to list)")
     parser.add_option("-v", "--velocity", type=int, default=10, metavar="V",
                       help="fish velocity (default: 10)")
@@ -305,16 +305,16 @@ if __name__ == "__main__":
 
     if opts.fish == "?":
         for fish_name, fish_type in fish_types.items():
-            print fish_name
-            print "=" * len(fish_name)
-            print
+            print (fish_name)
+            print ("=" * len(fish_name))
+            print()
             class TempFish(SwimFishTimeSync, fish_type):
                 pass
             normal = TempFish().render(0, reverse=False)
             reverse = TempFish().render(0, reverse=True)
             for normline, revline in zip(normal, reverse):
-                print normline, "  ", revline
-            print
+                print (normline, "  ", revline)
+            print()
         sys.exit(0)
     else:
         fish_look = fish_types[opts.fish]
